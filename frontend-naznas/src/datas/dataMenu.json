@@ -1,0 +1,98 @@
+
+[
+    { "id": "1", "title": "Beranda", "icon": "", "link": "" },
+    {
+      "id": "2",
+      "title": "Layanan",
+      "icon": "RxTriangleDown",
+      "link": "",
+      "subMenu": [
+        {
+          "id": "1",
+          "title": "Layanan",
+          "Link": ""
+        },
+        {
+          "id": "2",
+          "title": "Layanan",
+          "Link": ""
+        },
+        {
+          "id": "3",
+          "title": "Layanan",
+          "Link": ""
+        }
+      ]
+    },
+    { "id": "3", "title": "PPID", "icon": "", "link": "" },
+    {
+      "id": "4",
+      "title": "Informsi",
+      "icon": "RxTriangleDown",
+      "link": "",
+      "subMenu": [
+        {
+          "id": "1",
+          "title": "Layanan",
+          "Link": ""
+        },
+        {
+          "id": "2",
+          "title": "Layanan",
+          "Link": ""
+        },
+        {
+          "id": "3",
+          "title": "Layanan",
+          "Link": ""
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Donasi",
+      "icon": "RxTriangleDown",
+      "link": "",
+      "subMenu": [
+        {
+          "id": "1",
+          "title": "Layanan",
+          "Link": ""
+        },
+        {
+          "id": "2",
+          "title": "Layanan",
+          "Link": ""
+        },
+        {
+          "id": "3",
+          "title": "Layanan",
+          "Link": ""
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Tentang Kami",
+      "icon": "RxTriangleDown",
+      "link": "",
+      "subMenu": [
+        {
+          "id": "1",
+          "title": "Layanan",
+          "Link": ""
+        },
+        {
+          "id": "2",
+          "title": "Layanan",
+          "Link": ""
+        },
+        {
+          "id": "3",
+          "title": "Layanan",
+          "Link": ""
+        }
+      ]
+    }
+  ]
+  
