@@ -1,0 +1,48 @@
+title  Sequence Contributor Login
+    participant Contributor
+    participant Frontend
+    participant Backend
+    participant Database
+    participant Cookie
+
+    Contributor ->> Frontend: Memilih menu login
+    Frontend ->> Contributor: Menampilkan halaman form login (email & password)
+    Contributor ->> Frontend: Menginput email dan password
+    Frontend ->> Backend: Mengirimkan data email dan password
+
+    Backend ->> Backend: Validasi format email dan cek rate limiting (express-rate-limit)
+    Backend ->> Database: Mencari email di database
+    Database -->> Backend: Mengembalikan data user jika ditemukan
+
+    alt Email tidak ditemukan
+        Backend -->> Frontend: Mengirim respons "Akun tidak terdaftar"
+        Frontend -->> Contributor: Menampilkan pesan akun tidak terdaftar
+    else Jika email ditemukan
+        Backend ->> Backend: Memvalidasi password (bcrypt)
+        alt Password salah
+            Backend -->> Frontend: Mengirim respons "Password salah"
+            Frontend -->> Contributor: Menampilkan pesan "Password salah"
+        else Password benar
+            Backend ->> Database: Mengambil role & permission berdasarkan user ID
+            Backend ->> Backend: Membuat sesi login & access token (JWT)
+            Backend ->> Cookie: Menyimpan access token & refresh token (HTTPOnly, Secure, SameSite=Strict)
+            Backend ->> Database: Menyimpan sesi login & refresh token hash
+            Backend -->> Frontend: Mengirim status sukses login
+            Frontend -->> Contributor: Menampilkan dashboard admin
+        end
+    end
+
+    note over Frontend: Menyertakan access token dalam setiap request ke API
+
+    note over Backend: Jika access token expired,\nfrontend otomatis meminta refresh token untuk mendapatkan yang baru
+
+    Frontend ->> Backend: Mengirim refresh token untuk mendapatkan access token baru
+    Backend ->> Database: Memvalidasi refresh token dan memastikan belum digunakan
+    alt Refresh token valid
+        Backend ->> Backend: Membuat access token baru
+        Backend ->> Database: Menandai refresh token lama sebagai "sudah digunakan"
+        Backend -->> Frontend: Mengirim access token baru
+    else Refresh token tidak valid atau expired
+        Backend -->> Frontend: Mengirim status gagal refresh
+        Frontend -->> Contributor: Menampilkan pesan "Sesi habis, silakan login ulang"
+    end

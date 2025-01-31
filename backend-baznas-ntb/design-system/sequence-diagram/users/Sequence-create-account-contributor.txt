@@ -1,0 +1,50 @@
+title Sequence Create Account Contributor
+
+participant Admin
+participant Frontend
+participant Backend
+participant Database
+
+note over Admin: Admin wajib login\njika berhasil masuk ke dashboard
+
+Admin -> Frontend: Memilih menu contributor
+Frontend --> Admin: Menampilkan halaman manage contributor
+Admin -> Frontend: Klik "Tambah Contributor"
+Frontend --> Admin: Menampilkan form add contributor
+Admin -> Frontend: Menginput data contributor (name, position, email, password, role, permission)
+
+Frontend -> Backend: Mengirimkan data contributor
+Backend -> Backend: Validasi data (name, position, email, password, role, permission)
+
+alt Data contributor tidak valid
+    Backend -> Frontend: Mengirimkan response "Data tidak valid"
+    Frontend -> Admin: Menampilkan pesan error "Data tidak valid"
+else Data contributor valid
+    Backend -> Backend: Memeriksa rate limiting untuk mencegah terlalu banyak permintaan
+    alt Terlalu banyak permintaan
+        Backend -> Frontend: Mengirimkan response "Terlalu banyak request, coba lagi nanti"
+        Frontend -> Admin: Menampilkan pesan "Terlalu banyak request, coba lagi nanti"
+    else Aman
+        Backend -> Database: Mengecek email contributor di database
+        Database -> Database: Melakukan pencarian data
+
+        alt Email sudah terdaftar
+            Database --> Backend: Mengirimkan data contributor
+            Backend -> Frontend: Mengirimkan response "Email telah terdaftar"
+            Frontend -> Admin: Menampilkan pesan "Email telah terdaftar"
+        else Email belum terdaftar
+            note over Backend: Hashing password (bcrypt)
+            Backend -> Database: Menyimpan data contributor ke database
+
+            alt Penyimpanan gagal
+                Database --> Backend: Mengirimkan error
+                Backend -> Frontend: Mengirimkan response "Gagal membuat akun contributor"
+                Frontend -> Admin: Menampilkan pesan error "Gagal membuat akun contributor"
+            else Penyimpanan sukses
+                Backend -> Frontend: Mengirimkan response sukses
+                note over Frontend: Redirect ke halaman manage contributor\ndan menampilkan contributor baru dalam daftar
+            end
+        end
+    end
+end
+

@@ -1,0 +1,75 @@
+title  Sequence Admin Login
+
+Admin -> Frontend: Memilih menu login untuk mendapatkan link login
+Admin <-- Frontend: Menampilkan halaman form untuk input email
+Admin -> Frontend: Admin menginput email
+
+Frontend -> Backend: Mengirimkan data email admin
+
+Backend -> Backend: Validasi format email dan periksa rate limiting
+
+Frontend <-- Backend: Email tidak valid atau terlalu banyak request
+
+Admin <-- Frontend: Menampilkan pesan email tidak valid atau permintaan dibatasi
+
+Backend -> Database: Mencari email di database
+
+Database -> Database: Melakukan pencarian data
+
+Backend <-- Database: Data tidak ditemukan
+
+Frontend <-- Backend:Jika data tidak ditemukan, sistem mengirim respons\nakun tidak terdaftar atau "tidak dapat meneruskan permintaan"
+
+Admin <-- Frontend:Menampilkan pesan akun tidak terdaftar\natau "tidak dapat meneruskan permintaan"
+
+note over Backend:Jika email terdaftar, sistem membuat\none-time link login dengan token unik\n& expire time 2 menit
+
+Backend -> Database: Menyimpan token login terenkripsi dan waktu expire
+
+Backend -> Email:Mengirimkan one-time link ke email admin
+
+Admin -> Email:Membuka email dan mengklik one-time link
+
+Frontend -> Backend:Mengirimkan token dari one-time link
+
+Backend -> Backend: Memvalidasi token (cek ke database, cek expire, dan apakah sudah digunakan)
+
+Backend -> Database: Jika token valid, tandai sebagai "sudah digunakan"
+
+Frontend <-- Backend: Token tidak valid atau telah kadaluwarsa
+
+Admin <-- Frontend: Menampilkan pesan link tidak valid atau expired
+
+Admin -> Frontend: Jika valid, menampilkan form login
+
+Admin -> Frontend: Menginput email dan password
+
+Frontend -> Backend: Mengirimkan data email dan password
+
+note over Backend:Memvalidasi password dengan hashing (bcrypt/bcryptjs)
+
+Backend -> Database:Mengambil role & permission berdasarkan user (id)
+
+Backend -> Backend: Membuat sesi login & access token
+
+Backend -> Cookie: Menyimpan access token & refresh token (HTTPOnly, Secure, SameSite=Strict)
+
+Backend -> Database: Menyimpan sesi login & refresh token hash
+
+Frontend <-- Backend: Mengirimkan status sukses login
+
+note over Frontend: Menyertakan access token dalam setiap request ke API
+
+note over Backend: Jika access token expired,\nfrontend otomatis meminta refresh token untuk mendapatkan yang baru
+
+Frontend -> Backend: Mengirimkan refresh token untuk mendapatkan access token baru
+
+Backend -> Database: Memvalidasi refresh token dan memastikan belum digunakan
+
+Backend -> Backend: Jika valid, membuat access token baru
+
+Backend -> Database: Menandai refresh token lama sebagai "sudah digunakan"
+
+Frontend <-- Backend: Mengirimkan access token baru
+
+note over Frontend: Jika gagal refresh, pengguna harus login ulang

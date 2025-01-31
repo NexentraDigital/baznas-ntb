@@ -1,0 +1,56 @@
+title Sequence Create Fundraising With Admin
+
+participant Admin
+participant Frontend
+participant Backend
+participant Database
+
+
+note over Admin: Admin wajib login\njika berhasil masuk ke dashboard
+
+Admin -> Frontend: Memilih menu fundraising
+Frontend --> Admin: Menampilkan halaman manage fundraising
+Admin -> Frontend: Klik "Tambah Fundraising"
+Frontend --> Admin: Menampilkan form add fundraising
+Admin -> Frontend:Menginput data fundraising (title, image, description,\ntargetAmount, currentAmount, programName, programType, expirationDate)
+
+Frontend -> Backend: Mengirimkan data fundraising
+Backend -> Backend: Validasi data (title, image, description,\ntargetAmount, currentAmount, programName,\nprogramType, expirationDate)
+
+alt Tidak Valid
+  Backend -> Frontend: Mengirimkan response "Data tidak valid"
+  Frontend -> Admin: Menampilkan pesan error "Data tidak valid"
+else Valid
+      Backend -> Backend: Memeriksa rate limiting untuk mencegah terlalu banyak permintaan
+      alt Terlalu banyak permintaan
+        Backend -> Frontend: Mengirimkan response "Terlalu banyak request, coba lagi nanti"
+        Frontend -> Admin: Menampilkan pesan "Terlalu banyak request, coba lagi nanti"
+      else Aman
+        Backend -> Database: Menyimpan data di database
+        alt Penyimpanan Gagal
+          Database --> Backend: Mengirimkan error
+          Backend -> Frontend: Mengirimkan response "Gagal membuat fundraising"
+          Frontend -> Admin: Menampilkan pesan error "Gagal membuat fundraising"
+        else Penyimpanan Success
+          Backend -> Frontend: Mengirimkan response sukses
+          note over Frontend: Redirect ke halaman manage fundraising\ndan secara default statusnya panding, menampilkan fundraising baru\ndalam daftar panding
+        end
+      end
+end
+
+Admin -> Frontend: Membuka tab panding fundraising
+Admin -> Frontend: Mungubah status fundraising menjadi approve atau reject
+
+Frontend -> Backend: Mengrimkan data status fundraising
+
+Backend -> Database: Mengupdate status fundraising
+alt Pengupdatean Gagal
+   Database --> Backend: Mengirimkan error
+   Backend -> Frontend: Mengirimkan response "Gagal update status fundraising"
+   Frontend -> Admin: Menampilkan pesan error "Gagal update status fundraising"
+else Pengupdatean Success
+  Frontend <-- Backend: Mingirimkan response "Status success di update"
+  Admin <-- Frontend: Menampilkan response "Status success di update"
+end
+
+note over Frontend:Fundraising akan di tampilkan sesuai status, jika approve\nmaka user dapat melihat dan melakukan donasi sebaliknya jika reject
