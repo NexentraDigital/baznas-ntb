@@ -1,9 +1,16 @@
 {
   "name": "backend-baznas-ntb",
   "version": "1.0.0",
-  "main": "index.js",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "main": "app.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "node:dev": "dotenv -v APP_ENV=development nodemon app.js",
+    "node:prod": "dotenv -v APP_ENV=production node app.js",
+    "prisma:seed": "dotenv -e .env.development npx prisma db seed",
+    "prisma:generate": "dotenv -v APP_ENV=production npx prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -15,8 +22,10 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "compression": "^1.7.5",
+    "cookie-parser": "^1.4.7",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
+    "csrf": "^3.1.0",
     "dotenv": "^16.4.7",
     "error-handler-json": "^2.1.0",
     "errorhandler": "^1.5.1",
@@ -45,6 +54,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "dotenv-cli": "^8.0.0"
+    "dotenv-cli": "^8.0.0",
+    "ejs": "^3.1.10"
   }
 }

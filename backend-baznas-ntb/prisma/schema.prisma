@@ -1,0 +1,463 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String  @unique
+  description String?
+
+  permission    Permission[]
+  adminId       String       @unique @db.ObjectId
+  admin         Admin        @relation(fields: [adminId], references: [id])
+  contributorId String       @unique @db.ObjectId
+  contributor   Contributor  @relation(fields: [contributorId], references: [id])
+}
+
+model Permission {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String  @unique
+  description String?
+
+  roleId String @db.ObjectId
+  role   Role   @relation(fields: [roleId], references: [id])
+}
+
+model Admin {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String           @unique
+  password       String
+  createdAt      DateTime         @default(now())
+  role           Role?
+  session        Session[]
+  fundraising    Fundraising[]
+  donatur        Donatur[]
+  blog           Blog[]
+  layananZis     LayananZis[]
+  LaporanTahunan LaporanTahunan[]
+  newsLatter     NewsLatter[]
+  contributor    Contributor[]
+  oneTimeLink    OneTimeLink[]
+}
+
+model Contributor {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  position String
+  email    String  @unique
+  password String
+  otp      String?
+
+  role        Role?
+  session     Session[]
+  fundraising Fundraising[]
+  blog        Blog[]
+
+  adminId String? @db.ObjectId
+  admin   Admin?  @relation(fields: [adminId], references: [id])
+}
+
+model Session {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  ipAddress  String
+  userAgent  String
+  token      String   @unique
+  lastUsedAt DateTime @default(now())
+  expiresAt  DateTime
+  isRevoked  Boolean  @default(false)
+  revokedAt  DateTime
+
+  adminId       String?      @db.ObjectId
+  contributorId String?      @db.ObjectId
+  admin         Admin?       @relation(fields: [adminId], references: [id])
+  contributor   Contributor? @relation(fields: [contributorId], references: [id])
+}
+
+model OneTimeLink {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  token     String
+  expiredAt DateTime
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  adminId String? @db.ObjectId
+  admin   Admin?  @relation(fields: [adminId], references: [id])
+}
+
+model Fundraising {
+  id              String                 @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     Description?
+  distribution    Distribution[]
+  targetAmount    Float
+  currentAmount   Float
+  programName     String
+  programType     FundraisingProgramType @default(donasi)
+  publicationDate DateTime
+  expirationDate  DateTime
+  status          Status                 @default(panding)
+  transaction     Transaction[]
+
+  adminId       String? @db.ObjectId
+  contributorId String? @db.ObjectId
+
+  admin       Admin?       @relation(fields: [adminId], references: [id])
+  contributor Contributor? @relation(fields: [contributorId], references: [id])
+}
+
+model Description {
+  id          String            @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  image       FundraisingImage?
+
+  fundraisingId String      @unique @db.ObjectId
+  fundraising   Fundraising @relation(fields: [fundraisingId], references: [id])
+}
+
+model Distribution {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  image       FundraisingImage[]
+
+  fundraisingId String?      @db.ObjectId
+  fundraising   Fundraising? @relation(fields: [fundraisingId], references: [id])
+}
+
+model FundraisingImage {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  fileName String
+  url      String
+
+  descriptionId  String  @unique @db.ObjectId
+  distributionId String? @db.ObjectId
+
+  description  Description   @relation(fields: [descriptionId], references: [id])
+  distribution Distribution? @relation(fields: [distributionId], references: [id])
+}
+
+model Transaction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String
+  grossAmount Float
+  payment     Payment?
+
+  donationType          DonationType
+  tranxactionMidtransId String
+  subCategory           SubCategoryType
+  transactionDate       DateTime
+  transactionStatus     TransactionStatusType @default(panding)
+  riwayatTransaction    RiwayatTransaction[]
+
+  fundraisingId String @db.ObjectId
+  donaturId     String @db.ObjectId
+
+  fundraising Fundraising @relation(fields: [fundraisingId], references: [id])
+  donatur     Donatur     @relation(fields: [donaturId], references: [id])
+}
+
+model Donatur {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  fullName    String
+  email       String
+  noHp        String
+  message     String
+  isAnonym    Boolean       @default(false)
+  transaction Transaction[]
+
+  adminId String? @db.ObjectId
+  admin   Admin?  @relation(fields: [adminId], references: [id])
+}
+
+model RiwayatTransaction {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  status      String
+  description String
+  amount      Float
+
+  transactionId String      @unique @db.ObjectId
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+}
+
+model Payment {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  paymentMethod PaymentType
+
+  bankTransfer BankTransfer?
+  creditCard   CreditCard?
+  gopay        Gopay?
+  cStore       Cstore?
+
+  transactionId String      @unique @db.ObjectId
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+}
+
+model BankTransfer {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  bank     BankType
+  vaNumber String
+  eChannel Echannel?
+
+  paymentId String  @unique @db.ObjectId
+  payment   Payment @relation(fields: [paymentId], references: [id])
+}
+
+model CreditCard {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  orderId          String
+  grossAmount      Float
+  cardNumber       String
+  tokenId          String
+  bankOneTimeToken String
+  cardExpYear      String
+  cardExpMonth     String
+  cardCvv          String
+  authentication   Boolean
+
+  paymentId String  @unique @db.ObjectId
+  payment   Payment @relation(fields: [paymentId], references: [id])
+}
+
+model Gopay {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  enableCollback Boolean
+  callbackUrl    String
+
+  paymentId String  @unique @db.ObjectId
+  payment   Payment @relation(fields: [paymentId], references: [id])
+}
+
+model Cstore {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  store             Boolean
+  message           String
+  alfamartFreeText1 String?
+  alfamartFreeText2 String?
+
+  paymentId String  @unique @db.ObjectId
+  payment   Payment @relation(fields: [paymentId], references: [id])
+}
+
+model Echannel {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  billKey   String
+  billInfo1 String?
+  billInfo2 String?
+
+  bankTransferId String       @unique @db.ObjectId
+  bankTransfer   BankTransfer @relation(fields: [bankTransferId], references: [id])
+}
+
+model Slider {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     String?
+  sliderType      SliderType
+  image           ContentImage[]
+  bublicationDate DateTime
+  expiredDate     DateTime
+}
+
+model Background {
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  sesction       String
+  backgroundType SliderType
+  image          ContentImage[]
+}
+
+model ContentImage {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  fileName String
+  url      String
+
+  sliderId     String     @db.ObjectId
+  backgroundId String     @db.ObjectId
+  slider       Slider     @relation(fields: [sliderId], references: [id])
+  background   Background @relation(fields: [backgroundId], references: [id])
+}
+
+model Blog {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  body      String
+  blogType  BlogType    @default(artikel)
+  image     BlogImage[]
+  status    Status      @default(panding)
+  createdAt DateTime    @default(now())
+
+  adminId       String?      @db.ObjectId
+  contributorId String?      @db.ObjectId
+  admin         Admin?       @relation(fields: [adminId], references: [id])
+  contributor   Contributor? @relation(fields: [contributorId], references: [id])
+}
+
+model BlogImage {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  fileName String
+  url      String
+
+  blogId String @db.ObjectId
+  blog   Blog   @relation(fields: [blogId], references: [id])
+}
+
+model LayananZis {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  fullName    String
+  email       String
+  noHp        String
+  layananType LayananType
+  tentang     String
+  message     String
+
+  adminId String? @db.ObjectId
+  admin   Admin?  @relation(fields: [adminId], references: [id])
+}
+
+model LaporanTahunan {
+  id        String               @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  file      FileLaporanTahunan[]
+  createdAt DateTime             @default(now())
+
+  adminId String? @db.ObjectId
+  admin   Admin?  @relation(fields: [adminId], references: [id])
+}
+
+model FileLaporanTahunan {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  fileName String
+  url      String
+
+  laporanTahunanId String         @db.ObjectId
+  laporanTahunan   LaporanTahunan @relation(fields: [laporanTahunanId], references: [id])
+}
+
+model NewsLatter {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  sendedAt     DateTime
+  targetSended DateTime
+  totalSended  Int
+  createdAt    DateTime @default(now())
+
+  adminId String? @db.ObjectId
+  admin   Admin?  @relation(fields: [adminId], references: [id])
+}
+
+/**
+ * Status untuk fundraising
+ */
+
+enum Status {
+  panding
+  approved
+  rejected
+}
+
+/**
+ * Jenis program untuk fundraising
+ */
+
+enum FundraisingProgramType {
+  donasi
+  fidyah
+}
+
+/**
+ * Jesnis donasi
+ */
+
+enum DonationType {
+  donasi
+  infak
+  fidyah
+  zakat
+}
+
+/**
+ * sub category untuk transaction zakat
+ */
+
+enum SubCategoryType {
+  zakat_harta
+  zakat_profesi
+  zakat_simpanan
+  zakat_perdagangan
+}
+
+/**
+ * Status untuk transaction
+ */
+
+enum TransactionStatusType {
+  panding
+  success
+  cancel
+}
+
+/**
+ * payment method
+ */
+
+enum PaymentType {
+  bank_transfer
+  credit_card
+  gopay
+  cstore
+}
+
+/**
+ * nama bank untuk bank transfer
+ */
+
+enum BankType {
+  bca
+  bni
+  bri
+  mandiri_bill
+  permata
+  cimb
+}
+
+/**
+ * type halaman sesuai dengan slider dan main contant
+ */
+
+enum SliderType {
+  landing_page
+  zakat_page
+  infak_page
+}
+
+/**
+ * type halaman sesuai dengan slider dan main contant
+ */
+
+enum BlogType {
+  artikel
+  cerita_aksi
+  press_release
+}
+
+/**
+ * type halaman sesuai dengan slider dan main contant
+ */
+
+enum LayananType {
+  konsultasi
+  konfirmasi
+}
