@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "title": "Rekening Zakat",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Bayar Zakat Sekarang",
+    "icon": "/icon-zakat.svg",
+    "link": "/"
+  },
+  {
+    "id": 2,
+    "title": "Infaq",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Bayar Infaq Sekarang",
+    "icon": "/icon-infaq.svg",
+    "link": "/"
+  },
+  {
+    "id": 3,
+    "title": "Fidyah",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Tunaikan Fidyah",
+    "icon": "/icon-fidyah.svg",
+    "link": "/"
+  },
+  {
+    "id": 4,
+    "title": "Kalkulator Zakat",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Hitung Zakat",
+    "icon": "/icon-kalkulatorZakat.svg",
+    "link": "/"
+  },
+  {
+    "id": 5,
+    "title": "Konfirmasi Donasi",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Konfirmasi Donasi",
+    "icon": "/icon-konfirmasiDonasi.svg",
+    "link": "/"
+  },
+  {
+    "id": 6,
+    "title": "Jemput Zakat",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Jemput Zakat",
+    "icon": "/icon-jemputZakat.svg",
+    "link": "/"
+  },
+  {
+    "id": 7,
+    "title": "Chanel Pembayaran",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Chanel Pembayaran",
+    "icon": "/icon-chanelPembayaran.svg",
+    "link": "/"
+  },
+  {
+    "id": 8,
+    "title": "Pengumpulan Zakat",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Pengumpulan Zakat",
+    "icon": "/icon-pengumpulanZakat.svg",
+    "link": "/"
+  }
+]

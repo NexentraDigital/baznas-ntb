@@ -1,0 +1,24 @@
+@import './font.css';
+
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.custom-dots {
+    @apply flex justify-center mt-4;
+  }
+  
+  .custom-dots li {
+    @apply mx-1;
+  }
+  
+  .custom-dots li.slick-active div {
+    @apply bg-Neutral-100 w-3 h-3; /* Warna dan ukuran dots aktif */
+  }
+  
+
+

@@ -1,0 +1,12 @@
+/* styles.css */
+@media (min-width: 768px) { /* Ukuran md dan lebih besar */
+    .bg-footer {
+      background-image: url('/bg-footer-dekstop.svg');
+    }
+  }
+  
+  @media (max-width: 767px) { /* Ukuran md dan lebih kecil */
+    .bg-footer {
+      background-image: url('/bg-footer-mobile.svg');
+    }
+  }
