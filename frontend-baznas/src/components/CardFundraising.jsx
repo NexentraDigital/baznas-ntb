@@ -9,7 +9,7 @@ export default function CardFundraising({
   ...props
 }) {
   return (
-    <div className={`bg-white rounded-[20px] p-4 w-80` + className}>
+    <div className={`bg-white rounded-[20px] p-4 w-[19rem]` + className}>
       <center>
         <img
           src={img}

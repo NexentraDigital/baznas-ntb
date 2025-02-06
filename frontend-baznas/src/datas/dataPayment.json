@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "title": "Gopay",
+    "icon": "/icon-gopay.svg"
+  },
+  {
+    "id": 2,
+    "title": "Dana",
+    "icon": "/icon-dana.svg"
+  },
+  {
+    "id": 3,
+    "title": "Link Aja",
+    "icon": "/icon-linkAja.svg"
+  },
+  {
+    "id": 4,
+    "title": "Ovo",
+    "icon": "/icon-ovo.svg"
+  },
+  {
+    "id": 5,
+    "title": "Ovo",
+    "icon": "/icon-isaku.svg"
+  },
+  {
+    "id": 6,
+    "title": "Kita Bisa",
+    "icon": "/icon-kitaBisa.svg"
+  },
+  {
+    "id": 7,
+    "title": "We Care",
+    "icon": "/icon-weCare.svg"
+  },
+  {
+    "id": 8,
+    "title": "Shopee Pay",
+    "icon": "/icon-shopeePay.svg"
+  },
+  {
+    "id": 9,
+    "title": "Bank Syariah Indonesia",
+    "icon": "/icon-bsi.svg"
+  },
+  {
+    "id": 10,
+    "title": "Syariah Jago",
+    "icon": "/icon-syariahJago.svg"
+  },
+  {
+    "id": 11,
+    "title": "Qris",
+    "icon": "/icon-qris.svg"
+  }
+]

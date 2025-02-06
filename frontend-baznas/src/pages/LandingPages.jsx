@@ -22,7 +22,6 @@ export default function LandingPages() {
     {
       title: "Alirkan Pahala Tak Terputus Dengan Sedekah Al-Qur’an",
       img: "/imgCeritaAksiDummy.svg",
-      
     },
   ];
 
@@ -67,7 +66,7 @@ export default function LandingPages() {
               className="h-9 lg:h-16"
             />
             <div>
-              <h1 className="font-semibold text-lg lg:text-3xl ">
+              <h1 className="font-semibold text-lg md:text-xl lg:text-3xl ">
                 Rp.25.000.000
               </h1>
               <h2>Dana Tersalurkan</h2>
@@ -77,7 +76,9 @@ export default function LandingPages() {
             <div className="flex gap-3 items-center">
               <img src="/icon-users.svg" alt="" className="h-9 lg:h-16" />
               <div>
-                <h1 className="font-semibold text-lg lg:text-3xl ">98.000</h1>
+                <h1 className="font-semibold text-lg md:text-xl lg:text-3xl ">
+                  98.000
+                </h1>
                 <h2>Orang Terbantu</h2>
               </div>
             </div>
@@ -89,15 +90,15 @@ export default function LandingPages() {
       {/* Section Layanan Kami */}
       <div className="bg-[url(/bg-layananKami.svg)] bg-cover pt-7 flex flex-col px-1 relative">
         <div className="reltive z-30">
-          <h1 className="text-Primary-600 text-center text-3xl font-bold">
+          <h1 className="text-Primary-600 text-center text-2xl md:text-3xl lg:text-4xl font-bold">
             Layanan Kami
           </h1>
-          <p className="text-neutral-600 mt-4 text-center text-[12px]">
+          <p className="text-neutral-600 mt-4 text-center text-[12px] md:text-lg lg:text-xl md:px-5">
             Layanan kami memudahkan penunaian zakat dan donasi, membantu sesama
             dengan berbagai kemudahan seperti kalkulator zakat, jemput zakat,
             dan konfirmasi donasi.
           </p>
-          <div className="mt-12  flex flex-wrap justify-center gap-5">
+          <div className="mt-12  flex flex-wrap justify-center gap-5 lg:gap-x-20">
             {dataLayanan.map((item) => (
               <div className="mb-7 ">
                 <CardLayananKami
@@ -105,6 +106,7 @@ export default function LandingPages() {
                   icon={item.icon}
                   title={item.title}
                   buttonText={item.textButton}
+                  link={item.link}
                 >
                   {item.description}
                 </CardLayananKami>
@@ -118,43 +120,45 @@ export default function LandingPages() {
       {/* Section Fundraising */}
       <div className="px-5 bg-[url(/bg-fundraising.svg)] bg-cover relative p-5 ">
         <div className="relative z-30 flex flex-col items-center">
-          <h1 className="text-white text-center text-xl font-bold">
+          <h1 className="text-white text-center text-2xl md:text-3xl lg:text-4xl font-bold">
             Berbagi Hingga Ke Pelosok
           </h1>
-          <p className="text-white mt-2 text-center text-sm mb-10">
+          <p className="text-white mt-2 text-center text-sm md:text-lg lg:text-xl mb-10">
             Wujudkan Rasa Syukur Atas Nikmat Dan Karunia Dari Allah SWT Dengan
-            Berbagi Kebahagiaan Kepada Para Dhaufa Hingga Ke Berbagai Daerah{" "}
+            Berbagi Kebahagiaan Kepada Para Dhaufa Hingga Ke Berbagai Daerah
           </p>
-         <div className="w-full mb-6">
-          <Carousel>
-            {itemsFundraising.map((item, index) => (
-              <center key={index}>
-                <CardFundraising img={item.img} title={item.title} />
-              </center>
-            ))}
-          </Carousel>
-         </div>
+          <div className="w-full mb-6">
+            <Carousel>
+              {itemsFundraising.map((item, index) => (
+                <center key={index}>
+                  <CardFundraising img={item.img} title={item.title} />
+                </center>
+              ))}
+            </Carousel>
+          </div>
         </div>
         <div className="bg-Primary-500/50 absolute left-0 right-0 top-0 bottom-0"></div>
       </div>
 
       {/* Section Statistik ZIS */}
-      <div className="p-5">
-        <h1 className="text-Primary-600 text-center text-2xl font-bold">
-          Statistik ZIS Se Provinsi <br /> Nusa Tenggara Barat
-        </h1>
-        <p className="text-neutral-600 mt-4 text-center text-[12px]">
-          Statistik Zakat, Infak, dan Sedekah (ZIS) di Nusa Tenggara Barat
-          mencerminkan kontribusi dan distribusi untuk mendukung kesejahteraan
-          masyarakat.
-        </p>
-        <div className="grid grid-cols-2 gap-4 mt-10 ">
+      <div className="px-3 py-5 md:flex md:p-10 md:gap-5 lg:gap-10 justify-center">
+        <div className="md:w-1/2">
+          <h1 className="text-Primary-600 text-center md:text-start text-2xl md:text-3xl lg:text-4xl font-bold">
+            Statistik ZIS Se Provinsi <br /> Nusa Tenggara Barat
+          </h1>
+          <p className="text-neutral-600 mt-4 text-center md:text-start text-[12px] md:text-lg lg:text-xl">
+            Statistik Zakat, Infak, dan Sedekah (ZIS) di Nusa Tenggara Barat
+            mencerminkan kontribusi dan distribusi untuk mendukung kesejahteraan
+            masyarakat.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mt-10 md:gap-x-16 md:mt-0 ">
           {statistikZis.map((item, index) => (
-            <div key={index} className="pl-5">
-              <h1 className="text-2xl text-Primary-600 font-bold">
+            <div key={index} className="pl-4 md:">
+              <h1 className="text-2xl md:txt-3xl lg:text-4xl text-Primary-600 font-bold">
                 {item.jumlah}
               </h1>
-              <h2 className="text-base text-neutral-600">{item.keterangan}</h2>
+              <h2 className="text-base md:text-lg lg:text-xl text-neutral-600">{item.keterangan}</h2>
             </div>
           ))}
         </div>
@@ -162,11 +166,11 @@ export default function LandingPages() {
 
       {/* Section Cerita Aksi */}
       <div className="relative bg-[url(/bg-ceritaAksi.svg)] bg-cover">
-        <div className="relative z-30 p-5 w-full">
-          <h1 className="text-2xl font-bold text-center text-white">
+        <div className="relative z-30 p-5 w-full ">
+          <h1 className="text-2xl md:text-3xl font-bold text-center text-white">
             Cerita Aksi
           </h1>
-          <p className="text-center text-sm text-white mt-2">
+          <p className="text-center md:text-lg text-sm text-white mt-2">
             Mari cari tahu info terkini mengenai aksi penyaluran Zakat, Infaq &
             Sadaqah BAZNAS Nusa Tenggara Barat
           </p>

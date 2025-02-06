@@ -1,14 +1,7 @@
 [
+
   {
     "id": 1,
-    "title": "Rekening Zakat",
-    "description": "bantuan untuk masyarakat yang berkebutuhan ",
-    "textButton":"Bayar Zakat Sekarang",
-    "icon": "/icon-zakat.svg",
-    "link": "/"
-  },
-  {
-    "id": 2,
     "title": "Infaq",
     "description": "bantuan untuk masyarakat yang berkebutuhan ",
     "textButton":"Bayar Infaq Sekarang",
@@ -16,11 +9,19 @@
     "link": "/"
   },
   {
-    "id": 3,
+    "id": 2,
     "title": "Fidyah",
     "description": "bantuan untuk masyarakat yang berkebutuhan ",
     "textButton":"Tunaikan Fidyah",
     "icon": "/icon-fidyah.svg",
+    "link": "/"
+  },
+  {
+    "id": 3,
+    "title": "Rekening Zakat",
+    "description": "bantuan untuk masyarakat yang berkebutuhan ",
+    "textButton":"Bayar Zakat Sekarang",
+    "icon": "/icon-zakat.svg",
     "link": "/"
   },
   {
@@ -53,7 +54,7 @@
     "description": "bantuan untuk masyarakat yang berkebutuhan ",
     "textButton":"Chanel Pembayaran",
     "icon": "/icon-chanelPembayaran.svg",
-    "link": "/"
+    "link": "/payment"
   },
   {
     "id": 8,

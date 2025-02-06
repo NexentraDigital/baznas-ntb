@@ -17,7 +17,7 @@ export default function Header() {
   return (
     <header className="text-sm lg:text-base">
       <div className="flex h-16 py-1 px-5 lg:py-7  justify-between items-center">
-        <img src="/logoBaznas.png" alt="" className="h-12" />
+        
         <button onClick={() => setbarMenu(!barMenu)} className="md:hidden">
           {barMenu ? (
             <SlClose size={36} className="text-Primary-500" />
@@ -39,6 +39,9 @@ export default function Header() {
             </div>
           ))}
         </nav>
+        <Link to={"/"}>
+        <img src="/logoBaznas.png" alt="" className="h-12" />
+        </Link>
       </div>
       <nav
         className={`flex-col md:hidden flex px-5 py-5 gap-1  ${
@@ -56,6 +59,7 @@ export default function Header() {
           </Link>
         ))}
       </nav>
+      
     </header>
   );
 }
