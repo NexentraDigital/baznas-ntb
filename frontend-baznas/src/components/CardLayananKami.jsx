@@ -27,7 +27,7 @@ export default function CardLayananKami({
       </center>
       <h1 className="font-semibold mt-12">{title}</h1>
       <p className="text-xs lg:text-sm h-24 lg:h-12">{children}</p>
-      <Link to={link}><PrimaryButton className="text-[9px] md:text-[10px] lg:text-sm px-2">{buttonText}</PrimaryButton></Link>
+      <Link to={link}><PrimaryButton className="text-[9px] md:text-[10px] lg:text-sm px-2 w-full">{buttonText}</PrimaryButton></Link>
     </div>
   );
 }
