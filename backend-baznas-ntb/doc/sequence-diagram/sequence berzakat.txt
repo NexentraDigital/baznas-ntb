@@ -1,0 +1,55 @@
+title sequence berzakat
+
+participant User
+participant Frontend
+participant Backend
+participant Database
+participant Payment Gateway
+
+
+entryspacing 1.0
+User -> Frontend: Mengunjungi halaman zakat
+User <-- Frontend: Menampilkan halaman zakat
+note over Frontend: Dapat menghitung kewajiban berzakat dengan kalkulator zakat sesuai jenis zakat
+
+User -> Frontend: Penginputan form jumlah zakat dan jenis zakat
+
+User -> Frontend: Mengirim permintaan zakat
+
+User <-- Frontend: Menampilkan doa zakat
+
+User <-- Frontend: Membaca doa zakat dan klik sudah membaca
+
+Frontend ->Backend: Mingirimkan data zakat
+Backend -> Backend: Validasi data
+alt Tidak valid
+  Frontend <-- Backend: Mingirimkan response data tidak valid
+  User <-- Frontend: Menampilkan response tidak valid
+else Valid
+Backend -> Database: Menyimpan data donasi sebagai transaksi
+alt Penyimpanan gagal
+  Frontend <-- Backend: Mengirim response penyimpanan gagal
+  User <-- Frontend: Menampilkan response penyimpanan gagal
+else Penyimpanan success
+  Backend -> Payment Gateway: Mengirimkan data donasi dan orderId
+  Payment Gateway -> Payment Gateway: Membuat transaksi berdasarkan orderId
+  alt Transaksi gagal
+  Database <-- Payment Gateway: Menghapus data donasi
+  else Transaksi success
+    Database <-- Payment Gateway: Mengirim respone popUp pembayaran
+  
+    Backend <-- Database: Mengirim data popup pembayaran
+    Frontend <-- Backend: Mengirimkan response popup pembayaran
+    User<-- Frontend: Menampilkan popup pembayaran
+  end
+end
+end
+
+User -> Payment Gateway:Melakukan pemilihan metode pembayaran dan melakukan pembayaran
+
+Backend <-- Payment Gateway: Mengirim data transaksi status
+note over Backend: transaction_status diterima
+Backend -> Database: Update status di database
+User <-- Payment Gateway: Redirect otomatis
+
+

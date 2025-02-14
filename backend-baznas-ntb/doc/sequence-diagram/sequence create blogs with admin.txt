@@ -1,0 +1,35 @@
+title sequence create blogs with admin
+
+participant Admin
+participant Frontend
+participant Backend
+participant Database
+
+
+Admin -> Frontend: Memilih halaman blogs
+note over Admin: blogType (jenis blogs)\nada artikel, cerita_aksi dan press_release 
+Admin -> Frontend: Menginputkan data dan jenis blogs
+Frontend -> Backend: Mengirim data blogs
+Backend -> Backend: Melakukan Validasi data
+alt Tidak Valid
+Frontend <-- Backend: Mengirimkan response error
+Admin <-- Frontend: Menampilkan response error
+else Valid
+Backend -> Database: Menyimpan data blogs
+alt Gagal
+Backend <-- Database: Mengirimkan error
+Frontend <-- Backend: Mengirimkan response error
+Admin <-- Frontend: Menampilkan response error
+else Success
+Frontend <-- Backend: Mengrimkan response success
+Admin <-- Frontend: Menampilkan response success
+
+note over Frontend: Redirect ke halaman daftar blogs
+end
+end
+
+Admin -> Frontend: Mengubah status blogs
+Frontend -> Backend: Mengrimkan data status
+Backend -> Database: Mengupdate data status blog di database
+
+note over Frontend: Blogs telah di bublish, dapat dilihat user

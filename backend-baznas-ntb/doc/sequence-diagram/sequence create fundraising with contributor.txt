@@ -1,0 +1,54 @@
+title  sequence create fundraising with contributor
+
+participant Contributor
+participant Frontend
+participant Backend
+participant Database
+participant Admin
+
+
+note over Contributor: Contributor wajib login\njika berhasil masuk ke dashboard
+
+Contributor -> Frontend: Memilih menu fundraising
+Frontend --> Contributor: Menampilkan halaman manage fundraising
+Contributor -> Frontend: Klik "Tambah Fundraising"
+Frontend --> Contributor: Menampilkan form add fundraising
+Contributor -> Frontend:Menginput data fundraising (title, image, description,\ntargetAmount, currentAmount, programName, programType, expirationDate)
+
+Frontend -> Backend: Mengirimkan data fundraising
+Backend -> Backend: Validasi data (title, image, description,\ntargetAmount, currentAmount, programName,\nprogramType, expirationDate)
+
+alt Tidak Valid
+  Backend -> Frontend: Mengirimkan response "Data tidak valid"
+  Frontend -> Contributor: Menampilkan pesan error "Data tidak valid"
+else Valid
+
+  
+        Backend -> Database: Menyimpan data di database
+        alt Penyimpanan Gagal
+          Database --> Backend: Mengirimkan error
+          Backend -> Frontend: Mengirimkan response "Gagal membuat fundraising"
+          Frontend -> Contributor: Menampilkan pesan error "Gagal membuat fundraising"
+        else Penyimpanan Success
+          Backend -> Frontend: Mengirimkan response sukses
+          note over Frontend:Redirect ke halaman manage fundraising\ndan secara default statusnya panding, menampilkan fundraising baru\ndalam daftar\n\nAdmin akan melakukan update status fundraising
+        end
+      
+end
+
+ Frontend <-- Admin:Membuka tab panding fundraising\n
+Frontend <-- Admin: Mungubah status fundraising menjadi approve atau reject
+
+Frontend -> Backend:Mengrimkan data status fundraising
+
+Backend -> Database: Mengupdate status fundraising
+alt Pengupdatean Gagal
+   Database --> Backend: Mengirimkan error
+   Backend -> Frontend: Mengirimkan response "Gagal update status fundraising"
+   Frontend -> Contributor: Menampilkan pesan error "Gagal update status fundraising"
+else Pengupdatean Success
+  Frontend <-- Backend: Mingirimkan response "Status success di update"
+  Contributor <-- Frontend: Menampilkan response "Status success di update"
+end
+
+note over Frontend:Fundraising akan di tampilkan sesuai status, jika approve\nmaka user dapat melihat dan melakukan donasi

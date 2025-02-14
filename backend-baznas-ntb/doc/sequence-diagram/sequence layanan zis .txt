@@ -1,0 +1,33 @@
+title secuence layanan zis
+
+participant User
+participant Frontend
+participant Backend
+participant Database
+participant Admin
+participant Chating
+
+User -> Frontend: Mengunjungi halaman layanan zis
+User -> Frontend: Memilih jenis layanan
+User -> Frontend: Menginputkan informasi layanan
+
+Frontend -> Backend: Mengrimkan data
+Backend -> Backend: Validasi data
+alt Tidak valid
+Frontend <-- Backend: Mengrim response error
+User <-- Frontend:Menampilkan response error
+else Valid
+Backend -> Database: Menyimpan data layanan
+alt Penyimpanan gagal
+Frontend <-- Backend: Mengrim response error
+User <-- Frontend:Menampilkan response error
+Backend <-- Database:Menirimkan error
+else Penyimpanan success
+note over Database: Data tersimpan dengan status panding
+end
+end
+
+Frontend <-- Admin: Menangani layanan zis
+Frontend -> Admin: Menampikan informasi layanan
+note over Chating: Jika memungkinkan admin dapat menghubungi user
+

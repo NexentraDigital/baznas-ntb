@@ -23,15 +23,22 @@ model Role {
   admin         Admin        @relation(fields: [adminId], references: [id])
   contributorId String       @unique @db.ObjectId
   contributor   Contributor  @relation(fields: [contributorId], references: [id])
+
+  @@index([name, adminId])
+  @@index([name, contributorId])
 }
 
 model Permission {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String  @unique
+  name        String
   description String?
 
   roleId String @db.ObjectId
   role   Role   @relation(fields: [roleId], references: [id])
+
+  @@index([name])
+  @@index([roleId])
+  @@index([name, roleId])
 }
 
 model Admin {
@@ -50,6 +57,9 @@ model Admin {
   newsLatter     NewsLatter[]
   contributor    Contributor[]
   oneTimeLink    OneTimeLink[]
+
+  @@index([createdAt])
+  @@index([name, email])
 }
 
 model Contributor {
@@ -67,6 +77,12 @@ model Contributor {
 
   adminId String? @db.ObjectId
   admin   Admin?  @relation(fields: [adminId], references: [id])
+
+  @@index([name])
+  @@index([adminId])
+  @@index([position])
+  @@index([name, email])
+  @@index([name, position])
 }
 
 model Session {
@@ -77,12 +93,22 @@ model Session {
   lastUsedAt DateTime @default(now())
   expiresAt  DateTime
   isRevoked  Boolean  @default(false)
-  revokedAt  DateTime
+  revokedAt  DateTime?
 
   adminId       String?      @db.ObjectId
   contributorId String?      @db.ObjectId
   admin         Admin?       @relation(fields: [adminId], references: [id])
   contributor   Contributor? @relation(fields: [contributorId], references: [id])
+
+  @@index([ipAddress])
+  @@index([lastUsedAt])
+  @@index([expiresAt])
+  @@index([isRevoked])
+  @@index([adminId])
+  @@index([contributorId])
+  @@index([token, isRevoked])
+  @@index([token, expiresAt])
+  @@index([ipAddress, lastUsedAt])
 }
 
 model OneTimeLink {
@@ -94,6 +120,14 @@ model OneTimeLink {
 
   adminId String? @db.ObjectId
   admin   Admin?  @relation(fields: [adminId], references: [id])
+
+  @@index([token])
+  @@index([expiredAt])
+  @@index([isUsed])
+  @@index([adminId])
+  @@index([token, isUsed])
+  @@index([token, expiredAt])
+  @@index([createdAt])
 }
 
 model Fundraising {
@@ -115,6 +149,18 @@ model Fundraising {
 
   admin       Admin?       @relation(fields: [adminId], references: [id])
   contributor Contributor? @relation(fields: [contributorId], references: [id])
+
+  @@index([title])
+  @@index([programName])
+  @@index([programType])
+  @@index([status])
+  @@index([publicationDate])
+  @@index([expirationDate])
+  @@index([adminId])
+  @@index([contributorId])
+  @@index([title, status])
+  @@index([programType, status])
+  @@index([publicationDate, status])
 }
 
 model Description {
@@ -125,6 +171,9 @@ model Description {
 
   fundraisingId String      @unique @db.ObjectId
   fundraising   Fundraising @relation(fields: [fundraisingId], references: [id])
+
+  @@index([title])
+  @@index([title, fundraisingId])
 }
 
 model Distribution {
@@ -135,6 +184,11 @@ model Distribution {
 
   fundraisingId String?      @db.ObjectId
   fundraising   Fundraising? @relation(fields: [fundraisingId], references: [id])
+
+  @@index([title])
+  @@index([fundraisingId])
+  @@index([title, fundraisingId])
+  @@index([title, description])
 }
 
 model FundraisingImage {
@@ -147,6 +201,11 @@ model FundraisingImage {
 
   description  Description   @relation(fields: [descriptionId], references: [id])
   distribution Distribution? @relation(fields: [distributionId], references: [id])
+
+  @@index([fileName])
+  @@index([distributionId])
+  @@index([fileName, descriptionId])
+  @@index([fileName, distributionId])
 }
 
 model Transaction {
@@ -167,6 +226,18 @@ model Transaction {
 
   fundraising Fundraising @relation(fields: [fundraisingId], references: [id])
   donatur     Donatur     @relation(fields: [donaturId], references: [id])
+
+  @@index([orderId])
+  @@index([tranxactionMidtransId])
+  @@index([transactionDate])
+  @@index([transactionStatus])
+  @@index([donationType])
+  @@index([subCategory])
+  @@index([fundraisingId])
+  @@index([donaturId])
+  @@index([orderId, transactionStatus])
+  @@index([transactionDate, transactionStatus])
+  @@index([donationType, subCategory])
 }
 
 model Donatur {
@@ -180,6 +251,15 @@ model Donatur {
 
   adminId String? @db.ObjectId
   admin   Admin?  @relation(fields: [adminId], references: [id])
+
+  @@index([fullName])
+  @@index([email])
+  @@index([noHp])
+  @@index([isAnonym])
+  @@index([adminId])
+  @@index([fullName, email])
+  @@index([email, noHp])
+  @@index([fullName, isAnonym])
 }
 
 model RiwayatTransaction {
@@ -190,6 +270,11 @@ model RiwayatTransaction {
 
   transactionId String      @unique @db.ObjectId
   transaction   Transaction @relation(fields: [transactionId], references: [id])
+
+  @@index([status])
+  @@index([amount])
+  @@index([status, amount])
+  @@index([status, transactionId])
 }
 
 model Payment {
@@ -203,6 +288,9 @@ model Payment {
 
   transactionId String      @unique @db.ObjectId
   transaction   Transaction @relation(fields: [transactionId], references: [id])
+
+  @@index([paymentMethod])
+  @@index([paymentMethod, transactionId])
 }
 
 model BankTransfer {
@@ -213,6 +301,11 @@ model BankTransfer {
 
   paymentId String  @unique @db.ObjectId
   payment   Payment @relation(fields: [paymentId], references: [id])
+
+  @@index([bank])
+  @@index([vaNumber])
+  @@index([bank, vaNumber])
+  @@index([vaNumber, paymentId])
 }
 
 model CreditCard {
@@ -230,6 +323,13 @@ model CreditCard {
 
   paymentId String  @unique @db.ObjectId
   payment   Payment @relation(fields: [paymentId], references: [id])
+
+  @@index([orderId])
+  @@index([tokenId])
+  @@index([cardNumber])
+  @@index([orderId, tokenId])
+  @@index([orderId, paymentId])
+  @@index([tokenId, authentication])
 }
 
 model Gopay {
@@ -239,6 +339,9 @@ model Gopay {
 
   paymentId String  @unique @db.ObjectId
   payment   Payment @relation(fields: [paymentId], references: [id])
+
+  @@index([enableCollback])
+  @@index([paymentId, enableCollback])
 }
 
 model Cstore {
@@ -250,6 +353,10 @@ model Cstore {
 
   paymentId String  @unique @db.ObjectId
   payment   Payment @relation(fields: [paymentId], references: [id])
+
+  @@index([store])
+  @@index([store, paymentId])
+  @@index([message])
 }
 
 model Echannel {
@@ -260,6 +367,9 @@ model Echannel {
 
   bankTransferId String       @unique @db.ObjectId
   bankTransfer   BankTransfer @relation(fields: [bankTransferId], references: [id])
+
+  @@index([billKey])
+  @@index([billKey, bankTransferId])
 }
 
 model Slider {
@@ -270,6 +380,14 @@ model Slider {
   image           ContentImage[]
   bublicationDate DateTime
   expiredDate     DateTime
+
+  @@index([title])
+  @@index([sliderType])
+  @@index([bublicationDate])
+  @@index([expiredDate])
+  @@index([title, sliderType])
+  @@index([bublicationDate, expiredDate])
+  @@index([sliderType, bublicationDate])
 }
 
 model Background {
@@ -277,6 +395,10 @@ model Background {
   sesction       String
   backgroundType SliderType
   image          ContentImage[]
+
+  @@index([sesction])
+  @@index([backgroundType])
+  @@index([sesction, backgroundType])
 }
 
 model ContentImage {
@@ -288,6 +410,12 @@ model ContentImage {
   backgroundId String     @db.ObjectId
   slider       Slider     @relation(fields: [sliderId], references: [id])
   background   Background @relation(fields: [backgroundId], references: [id])
+
+  @@index([fileName])
+  @@index([sliderId])
+  @@index([backgroundId])
+  @@index([fileName, sliderId])
+  @@index([fileName, backgroundId])
 }
 
 model Blog {
@@ -303,6 +431,17 @@ model Blog {
   contributorId String?      @db.ObjectId
   admin         Admin?       @relation(fields: [adminId], references: [id])
   contributor   Contributor? @relation(fields: [contributorId], references: [id])
+
+  @@index([title])
+  @@index([blogType])
+  @@index([status])
+  @@index([createdAt])
+  @@index([adminId])
+  @@index([contributorId])
+  @@index([title, blogType])
+  @@index([title, status])
+  @@index([blogType, status])
+  @@index([createdAt, status])
 }
 
 model BlogImage {
@@ -312,6 +451,10 @@ model BlogImage {
 
   blogId String @db.ObjectId
   blog   Blog   @relation(fields: [blogId], references: [id])
+
+  @@index([fileName])
+  @@index([blogId])
+  @@index([fileName, blogId])
 }
 
 model LayananZis {
@@ -325,6 +468,15 @@ model LayananZis {
 
   adminId String? @db.ObjectId
   admin   Admin?  @relation(fields: [adminId], references: [id])
+
+  @@index([fullName])
+  @@index([email])
+  @@index([noHp])
+  @@index([layananType])
+  @@index([adminId])
+  @@index([fullName, layananType])
+  @@index([email, noHp])
+  @@index([layananType, adminId])
 }
 
 model LaporanTahunan {
@@ -335,6 +487,12 @@ model LaporanTahunan {
 
   adminId String? @db.ObjectId
   admin   Admin?  @relation(fields: [adminId], references: [id])
+
+  @@index([title])
+  @@index([createdAt])
+  @@index([adminId])
+  @@index([title, createdAt])
+  @@index([title, adminId])
 }
 
 model FileLaporanTahunan {
@@ -344,6 +502,10 @@ model FileLaporanTahunan {
 
   laporanTahunanId String         @db.ObjectId
   laporanTahunan   LaporanTahunan @relation(fields: [laporanTahunanId], references: [id])
+
+  @@index([fileName])
+  @@index([laporanTahunanId])
+  @@index([fileName, laporanTahunanId])
 }
 
 model NewsLatter {
@@ -356,6 +518,14 @@ model NewsLatter {
 
   adminId String? @db.ObjectId
   admin   Admin?  @relation(fields: [adminId], references: [id])
+
+  @@index([sendedAt])
+  @@index([targetSended])
+  @@index([createdAt])
+  @@index([adminId])
+  @@index([email, sendedAt])
+  @@index([targetSended, totalSended])
+  @@index([sendedAt, targetSended])
 }
 
 /**

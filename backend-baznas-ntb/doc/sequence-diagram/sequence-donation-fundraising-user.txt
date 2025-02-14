@@ -1,0 +1,55 @@
+title sequence donation fundraising
+
+participant User
+participant Frontend
+participant Backend
+participant Database
+participant Payment Gateway
+
+
+entryspacing 1.0
+User -> Frontend: Mengunjungi halaman donasi
+User <-- Frontend: Menampilkan halaman donasi (fundraising)
+User -> Frontend: Memilih fundraising yang akan didonasikan
+
+User <-- Frontend: Menampilkan detail informasi fundraising
+
+User -> Frontend: Klik tombol donasi
+
+User -> Frontend: Penginputan form jumlah donasi dan data diri
+
+User -> Frontend: Mengirim permintaan donasi
+
+Frontend ->Backend:Mingirimkan data donasi
+Backend -> Backend: Validasi data
+alt Tidak valid
+  Frontend <-- Backend: Mingirimkan response data tidak valid
+  User <-- Frontend: Menampilkan response tidak valid
+else Valid
+Backend -> Database: Menyimpan data donasi sebagai transaksi
+alt Penyimpanan gagal
+  Frontend <-- Backend: Mengirim response penyimpanan gagal
+  User <-- Frontend: Menampilkan response penyimpanan gagal
+else Penyimpanan success
+  Backend -> Payment Gateway: Mengirimkan data donasi dan orderId
+  Payment Gateway -> Payment Gateway: Membuat transaksi berdasarkan orderId
+  alt Transaksi gagal
+  Database <-- Payment Gateway: Mengupdate isUsed (false) data donasi
+  else Transaksi success
+    Database <-- Payment Gateway: Mengirim respone popUp pembayaran
+  
+    Backend <-- Database: Mengirim data popup pembayaran
+    Frontend <-- Backend: Mengirimkan response popup pembayaran
+    User<-- Frontend: Menampilkan popup pembayaran
+  end
+end
+end
+
+User -> Payment Gateway:Melakukan pemilihan metode pembayaran dan melakukan pembayaran
+
+Backend <-- Payment Gateway: Mengirim data transaksi status
+note over Backend: transaction_status diterima
+Backend -> Database: Update status di database
+User <-- Payment Gateway: Redirect otomatis
+
+

@@ -8,5 +8,5 @@ import createHttpError from "http-errors";
  */
 
 export default function createErrorHandler(status, message, options = {}) {
-  return createHttpError(status, message, {...options});
+  return createHttpError(status, message, { ...options });
 }

@@ -1,0 +1,28 @@
+title sequence add distributation\non fundraising with admin
+
+participant Admin
+participant Frontend
+participant Backend
+participant Database
+
+note over Admin: List semua fundraising
+Admin -> Frontend: Memilih fundraising yang akan di tambahkan
+note over Frontend: Menampilkan form input untuk data distribution 
+Admin -> Frontend: Menginputkan data distributation
+Frontend -> Backend: Mengirimkan data
+Backend -> Backend: Melakukan Validasi data
+alt Tidak valid
+Frontend <-- Backend: Mengrimkan response error
+Admin <-- Frontend: Menampilkan response error
+else valid
+Backend -> Database: Menyimpan data distributation
+alt Gagal
+Backend <-- Database:Mengirimkan error
+Frontend <-- Backend: Mengrimkan response error
+Admin <-- Frontend: Menampilkan response error
+else Success
+Frontend <-- Backend: Mengirimkan response success
+end
+end
+
+note over Frontend: Redirect ke daftar list fundraising
